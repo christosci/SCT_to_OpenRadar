@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>Sector to OpenRadar Converter</title>
+</head>
+<body>
+	<textarea id="input" rows="30" cols="100" onClick="this.select();"></textarea><br>
+	<input type="submit" value="Convert" style="margin-top:20px" onclick="parse_lines()">
+
+	<script type="text/javascript">
+	function parse_lines() {
+		var textarea = document.getElementById("input");
+		var lines = textarea.value.split("\n");
+
+		for (var i=0; i<lines.length; ++i) {
+			lines[i] = parse_coords(lines[i]);
+		}
+
+		textarea.value = lines.join("\n");
+	}
+
+	function parse_coords(line) {
+		// regex removes leading/trailing whitespaces only
+		var coords = line.replace(/^\s+|\s+$/g,'').split(" ");
+
+		for (var c=0; c<4; ++c) { 
+			var dms = coords[c].split(".");
+			var direction = coords[c].charAt(0);
+			var d = parseInt(dms[0].substring(1));
+			var m = parseInt(dms[1]);
+			var s = parseInt(dms[2]);
+			var ms = parseInt(dms[3]);
+
+			coords[c] = dms_to_dd(d, m, s, ms, direction);
+		}
+
+		return "<line start=\"" + coords[0] + "," + coords[1] + "\" end=\"" + coords[2] + "," + coords[3] + "\"/>";
+	}
+
+	function dms_to_dd(d, m, s, ms, direction) {
+		direction.toUpperCase();
+		var dd = d + m/60 + s/(3600) + ms/3600000;
+	    if (direction == "S" || direction == "W") {
+	        dd = dd*-1;
+	    }
+
+		return dd.toFixed(6);
+	}
+	</script>
+</body>
+</html>
