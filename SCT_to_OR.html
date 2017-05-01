@@ -11,7 +11,7 @@
 	<script type="text/javascript">
 	function parse_lines() {
 		var textarea = document.getElementById("input");
-		var lines = textarea.value.split("\n");
+		var lines = textarea.value.replace(/^\s*$[\n\r]{1,}/gm, '').split("\n");
 
 		for (var i=0; i<lines.length; ++i) {
 			lines[i] = parse_coords(lines[i]);
