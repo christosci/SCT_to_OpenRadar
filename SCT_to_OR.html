@@ -41,9 +41,9 @@
 	function dms_to_dd(d, m, s, ms, direction) {
 		direction.toUpperCase();
 		var dd = d + m/60 + s/(3600) + ms/3600000;
-	    if (direction == "S" || direction == "W") {
-	        dd = dd*-1;
-	    }
+		if (direction == "S" || direction == "W") {
+			dd = dd*-1;
+		}
 
 		return dd.toFixed(6);
 	}
